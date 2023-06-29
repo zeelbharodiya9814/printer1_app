@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../class/allClass.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -39,179 +41,168 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text("Order Delivery",
             style: TextStyle(
-                letterSpacing: 2, fontSize: 23, fontWeight: FontWeight.w400)),
-        // centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(13),
-                color: Colors.green,
-              ),
-              child: TextButton(onPressed: () {
-                Navigator.pushNamed(context, 'Attendance');
-              }, child: Text("Attendance",style: TextStyle(color: Colors.white),),),
-            ),
-          ),
-          SizedBox(width: 10,),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(13),
-                color: Colors.green,),
-              child: TextButton(onPressed: () {
-                Navigator.pushNamed(context, 'Expense');
-              }, child: Text("Expense",style: TextStyle(color: Colors.white)),),
-            ),
-          )],
+                letterSpacing: 2, fontSize: SizeConfig.screenHeight * 0.025, fontWeight: FontWeight.w400)),
+        centerTitle: true,
       ),
       body: ListView.builder(
           itemCount: 5,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              padding:  EdgeInsets.only(left: getProportionateScreenHeight(10), right: getProportionateScreenHeight(10), top: getProportionateScreenHeight(10)),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(13),
+                  borderRadius: BorderRadius.circular(getProportionateScreenHeight(13),),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding:  EdgeInsets.all(getProportionateScreenHeight(8)),
                   child: Row(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: 100,
-                        width: 130,
+                        height: SizeConfig.screenHeight * .150,
+                        width: SizeConfig.screenWidth * .300,
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(getProportionateScreenHeight(12),),
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: getProportionateScreenWidth(10),
                       ),
-                      Text(
-                        "Item : $index",
-                        style: TextStyle(fontSize: 20),
+                      Column(
+                        children: [
+                          Container(
+                            width: SizeConfig.screenWidth * .300,
+                            child: Text(
+                              "Item : $index",
+                              style: TextStyle(fontSize: SizeConfig.screenHeight * 0.022),
+                            ),
+                          ),
+                        ],
                       ),
                       Spacer(),
 
-                      FloatingActionButton.extended(
-                        onPressed: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 280,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        topLeft: Radius.circular(30)),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          IconButton(onPressed: () {
-                                            if(_image != null) {
-                                              _image = null;
-                                              Navigator.of(context).pop();
-                                            } else {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(
-                                                      content: Text('Please Submit Report...'),
-                                                      backgroundColor: Colors.green,
-                                                      elevation: 10,
-                                                      behavior: SnackBarBehavior.floating,
-                                                      margin: EdgeInsets.all(5),
-                                              ),);
-                                            }
-                                          }, icon: Icon(Icons.done_outline_rounded,size: 30,color: Colors.green,)),
-                                        ],
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          FloatingActionButton.extended(
+                            onPressed: () {
+                              showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Padding(
+                                    padding:  EdgeInsets.all(getProportionateScreenHeight(8)),
+                                    child: Container(
+                                      height: SizeConfig.screenHeight * .350,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(getProportionateScreenHeight(30),),
+                                            topLeft: Radius.circular(getProportionateScreenHeight(30),)),
                                       ),
-                                      Text("Item : $index"),
-                                      SizedBox(height: 10,),
-                                      StreamBuilder(
-                                          builder: (context, builder) {
-                                            return Card(
-                                              elevation: 5,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(100)),
-                                              child:(_image != null) ?
-                                              CircleAvatar(
-                                                radius: 55,
-                                                backgroundImage: (_image != null)
-                                                    ? FileImage(_image!)
-                                                    : null,
-                                              ) : CircleAvatar(
-                                                radius: 55,
-                                                backgroundColor: Colors.white,
-                                                child: Icon(Icons.add_a_photo_outlined),
-                                              ),
-                                            );
-                                          }
-                                      ),
-                                      SizedBox(height: 10,),
-                                      Row(
+                                      child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Card(
-                                              elevation: 3,
-                                              child: TextButton(
-                                                  onPressed: () {
-                                                    getImageFromCamera();
-                                                    setState(() {
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              IconButton(onPressed: () {
+                                                if(_image != null) {
+                                                  _image = null;
+                                                  Navigator.of(context).pop();
+                                                } else {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                          content: Text('Please Submit Report...'),
+                                                          backgroundColor: Colors.green,
+                                                          elevation: 10,
+                                                          behavior: SnackBarBehavior.floating,
+                                                          margin: EdgeInsets.all(5),
+                                                  ),);
+                                                }
+                                              }, icon: Icon(Icons.done_outline_rounded,size: SizeConfig.screenHeight * 0.028,color: Colors.green,)),
+                                            ],
+                                          ),
+                                          Text("Item : $index"),
+                                          SizedBox(height: getProportionateScreenHeight(10),),
+                                          StatefulBuilder(
+                                              builder: (context, builder) {
+                                                return Card(
+                                                  elevation: 5,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(getProportionateScreenHeight(100))),
+                                                  child:(_image != null) ?
+                                                  CircleAvatar(
+                                                    radius: 55,
+                                                    backgroundImage: (_image != null)
+                                                        ? FileImage(_image!)
+                                                        : null,
+                                                  ) : CircleAvatar(
+                                                    radius: 55,
+                                                    backgroundColor: Colors.white,
+                                                    child: Icon(Icons.add_a_photo_outlined),
+                                                  ),
+                                                );
+                                              }
+                                          ),
+                                          SizedBox(height: getProportionateScreenHeight(10),),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Card(
+                                                  elevation: 3,
+                                                  child: TextButton(
+                                                      onPressed: () {
+                                                        getImageFromCamera();
+                                                        setState(() {
 
-                                                    });
-                                                  },
-                                                  child: Text(
-                                                    "Camera",
-                                                    style: TextStyle(
-                                                        letterSpacing: 2,
-                                                        fontSize: 18),
-                                                  ))),
-                                          SizedBox(width: 20),
-                                          Card(
-                                              elevation: 3,
-                                              child: TextButton(
-                                                  onPressed: () {
-                                                    getImageFromGallery();
-                                                    setState(() {
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                        "Camera",
+                                                        style: TextStyle(
+                                                            letterSpacing: 2,
+                                                            fontSize: SizeConfig.screenHeight * 0.020,),
+                                                      ))),
+                                              SizedBox(width: getProportionateScreenWidth(20),),
+                                              Card(
+                                                  elevation: 3,
+                                                  child: TextButton(
+                                                      onPressed: () {
+                                                        getImageFromGallery();
+                                                        setState(() {
 
-                                                    });
-                                                  },
-                                                  child: Text(
-                                                    "Gallery",
-                                                    style: TextStyle(
-                                                        letterSpacing: 2,
-                                                        fontSize: 18),
-                                                  ))),
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                        "Gallery",
+                                                        style: TextStyle(
+                                                            letterSpacing: 2,
+                                                            fontSize: SizeConfig.screenHeight * 0.020),
+                                                      ))),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        backgroundColor: Colors.blue[400],
-                        icon: Icon(Icons.add),
-                        label: Text(
-                          "Report",
-                          style: TextStyle(fontSize: 13),
-                        ),
+                            backgroundColor: Colors.blue[400],
+                            icon: Icon(Icons.add),
+                            label: Text(
+                              "Report",
+                              style: TextStyle(fontSize: SizeConfig.screenHeight * 0.015,),
+                            ),
+                          ),
+                        ],
                       ),
                       // IconButton(onPressed: () {}, icon: Icon(Icons.report,color: Colors.green,size: 30,))
                     ],
@@ -220,174 +211,6 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }),
-      // floatingActionButton: FloatingActionButton.extended(
-      //     onPressed: () {
-      //       InsertAndValidate();
-      //     },
-      //   icon: Icon(Icons.add),
-      //   label: Text("Order",style: TextStyle(fontSize: 19),),
-      // ),
     );
   }
-
-// InsertAndValidate() {
-//   showDialog(
-//     barrierDismissible: false,
-//     context: context,
-//     builder: (all) => AlertDialog(
-//       backgroundColor: Colors.grey[200],
-//       content: Form(
-//         key: imsertformKey,
-//         child: SingleChildScrollView(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               SizedBox(
-//                 height: 15,
-//               ),
-//               Text("${date}"),
-//               SizedBox(
-//                 height: 15,
-//               ),
-//               StatefulBuilder(
-//                 builder: (context, setState) {
-//                   return Column(
-//                     children: [
-//                       ElevatedButton(
-//                         onPressed: () async {
-//                           getImageFromGallary();
-//                           setState(() {
-//                           });
-//                         },
-//                         child: Text("Upload Book Image"),
-//                       ),
-//                       SizedBox(
-//                         height: 15,
-//                       ),
-//                       GestureDetector(
-//                         onTap: () async {
-//                            getImageFromGallary();
-//                           setState(() {
-//
-//                           });
-//                         },
-//                         child: Card(
-//                           elevation: 5,
-//                           shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(100)),
-//                           child:(_image != null) ?
-//                              CircleAvatar(
-//                               radius: 55,
-//                               backgroundImage: (_image != null)
-//                               ? FileImage(_image!)
-//                               : null,
-//                               ) : CircleAvatar(
-//                               radius: 55,
-//                              backgroundColor: Colors.white,
-//                             child: Icon(Icons.add_a_photo_outlined),
-//                               ),
-//                             ),
-//                           ),
-//                     ],
-//                   );
-//                 },
-//               ),
-//               SizedBox(
-//                 height: 15,
-//               ),
-//               Card(
-//                 elevation: 5,
-//                 shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(20)),
-//                 child: TextFormField(
-//                   controller: nameController,
-//                   textInputAction: TextInputAction.next,
-//                   validator: (val) {
-//                     if (val!.isEmpty) {
-//                       return "Enter name...";
-//                     }
-//                   },
-//                   onSaved: (val) {
-//                     setState(() {
-//                       name = val;
-//                     });
-//                   },
-//                   decoration: InputDecoration(
-//                       hintText: "Printer name",
-//                       hintStyle: TextStyle(color: Colors.grey[400]),
-//                       filled: true,
-//                       fillColor: Colors.white,
-//                       border: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(20),
-//                         borderSide: BorderSide.none,
-//                       )),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//       actions: [
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             OutlinedButton(
-//                 onPressed: () {
-//                   nameController.clear();
-//
-//                   setState(() {
-//                     name = null;
-//                   });
-//
-//                   Navigator.pop(context);
-//                 },
-//                 child: Text("Cancel")),
-//             SizedBox(
-//               width: 20,
-//             ),
-//             ElevatedButton(
-//               onPressed: () async {
-//                 if (imsertformKey.currentState!.validate()) {
-//                   imsertformKey.currentState!.save();
-//
-//                   Map<String, dynamic> data = {
-//                     'name': name,
-//                     'date': date,
-//                     'image': _image,
-//                   };
-//
-//                   Navigator.of(context).pop();
-//
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     SnackBar(
-//                       content: Text("Record inserted successfully..."),
-//                       backgroundColor: Colors.green,
-//                       behavior: SnackBarBehavior.floating,
-//                     ),
-//                   );
-//                   print("validate successfully...");
-//                 } else {
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     SnackBar(
-//                       content: Text("Record insertion failed"),
-//                       backgroundColor: Colors.red,
-//                       behavior: SnackBarBehavior.floating,
-//                     ),
-//                   );
-//                 }
-//
-//                 nameController.clear();
-//
-//                 setState(() {
-//                   name = null;
-//                 });
-//               },
-//               child: Text("Apply"),
-//             ),
-//           ],
-//         )
-//       ],
-//     ),
-//   );
-// }
 }

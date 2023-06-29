@@ -11,9 +11,9 @@ void main() {
       debugShowCheckedModeBanner: false,
       routes: {
         '/' : (context) => HomePage(),
-        'Expense' : (context) => Expense(),
-        'ExpenseData' : (context) => ExpenseData(),
-        'Attendance' : (context) => Attendance(),
+        // 'Expense' : (context) => Expense(),
+        // 'ExpenseData' : (context) => ExpenseData(),
+        // 'Attendance' : (context) => Attendance(),
       },
     ),
   );
